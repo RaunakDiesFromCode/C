@@ -6,6 +6,10 @@ int main() {
     int** doublePtr = &ptr;
 
     printf("Before modification: %d\n", **doublePtr);
+    printf("&doublePtr: %d\n", &doublePtr);
+    printf("doublePtr: %d\n", doublePtr);
+    printf("&tr: %d\n", &ptr);
+    printf("ptr: %d\n", ptr);
 
     **doublePtr = 20;
 
