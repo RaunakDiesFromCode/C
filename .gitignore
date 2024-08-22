@@ -1,0 +1,10 @@
+# Ignore compiled C binaries (with no extension on macOS)
+a.out
+*.out
+
+# Ignore Windows executable files
+*.exe
+
+# Ignore backup files
+*.bak
+*.BAK
