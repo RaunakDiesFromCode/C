@@ -19,8 +19,8 @@ Feel free to explore the programs, learn from the code, and modify them accordin
 ### Steps to Run
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/your-username/c-programs-collection.git
-   cd c-programs-collection
+   git repo clone RaunakDiesFromCode/C
+   cd C
 
 2. Compile the desired program:
    ```bash
