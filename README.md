@@ -1,4 +1,4 @@
-# C Programs Collection
+# Some basic C Programs Collection
 
 Welcome to the **C Programs Collection** repository! This repository contains a variety of C programs that serve different purposes, ranging from basic algorithms and data structures to advanced applications. The aim of this collection is to provide useful examples and templates for learning, practicing, or solving specific problems in C.
 
