@@ -3,5 +3,6 @@
     "PAT1.C": "cpp",
     "SWAPNV.C": "cpp",
     "ARMSTRON.C": "cpp"
-  }
+  },
+  "cSpell.enableFiletypes": ["!c"]
 }
