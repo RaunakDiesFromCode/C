@@ -50,17 +50,17 @@ int main()
     scanf("%d", &i);
     switch (i)
     {
-    case 1:
-      printf("\nEnter data: ");
-      scanf("%d", &x);
-      push(x);
-      break;
-    case 2:
-      pop();
-      break;
-    case 3:
-      display();
-      break;
+      case 1:
+        printf("\nEnter data: ");
+        scanf("%d", &x);
+        push(x);
+        break;
+      case 2:
+        pop();
+        break;
+      case 3:
+        display();
+        break;
     }
   }
   return 0;
