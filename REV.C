@@ -14,6 +14,5 @@ int main() {
 	printf("\nEnter a number: ");
 	scanf("%d", &n);
 	(n == rev(n))?printf("%d is Palindrome",n):printf("%d is not a Palindrome",n);
-	getch();
 	return 0;
 }

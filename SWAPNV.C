@@ -11,12 +11,10 @@ int main() {
 
 	int aa;
 	int bb;
-	clrscr();
 	printf("Enter first number: ");
 	scanf("%d", &aa);
 	printf("Enter second number: ");
 	scanf("%d", &bb);
 	swap(aa, bb);
-	getch();
 	return 0;
 }

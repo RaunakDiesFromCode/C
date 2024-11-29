@@ -15,6 +15,6 @@ int main() {
 	printf("\nEnter a number: ");
 	scanf("%d", &n);
 	(n == arm(n))?printf("%d is Armstrong",n):printf("%d is not a Armstrong",n);
-	getch();
+	// getch();
 	return 0;
 }

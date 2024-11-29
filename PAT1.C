@@ -2,13 +2,13 @@
 int main() {
 	int i,j;
 
-	clrscr();
+	// clrscr();
 	for(i = 0; i <= 3; i++){
 		for(j = 0; j <= i; j++) {
 			printf("*");
 		}
 		printf("\n");
 	}
-	getch();
+	// getch();
 	return 0;
 }

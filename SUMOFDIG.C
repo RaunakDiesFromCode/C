@@ -15,6 +15,5 @@ int main() {
 	printf("\nEnter a number: ");
 	scanf("%d", &n);
 	printf("Sum of digits of %d is %d",n, sum(n));
-	getch();
 	return 0;
 }

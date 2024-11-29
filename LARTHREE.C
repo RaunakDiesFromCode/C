@@ -14,7 +14,7 @@ int lar(int a, int b, int c) {
 
 int main() {
 	int a, b, c;
-	clrscr();
+	// clrscr();
 	printf("Enter first number: ");
 	scanf("%d", &a);
 	printf("Enter second number: ");
@@ -23,7 +23,7 @@ int main() {
 	scanf("%d", &c);
 
 	printf("\nLargest among the three: %d", lar(a, b, c));
-	getch();
+	// getch();
 	return 0;
 }
 
