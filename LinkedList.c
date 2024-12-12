@@ -1,214 +1,211 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
+#include <string.h>
 
-struct record
+// Define the structure for a node
+typedef struct Node
 {
     int roll;
     char name[100];
-};
-
-typedef struct record RD;
-
-struct Node
-{
-    RD info;
     struct Node *next;
-};
+} Node;
 
-typedef struct Node ND;
-
-void insert_begin(ND **ptr, RD item)
+// Function to create a new node
+Node *create_node(int roll, char *name)
 {
-    printf("\n");
-    ND *temp = (ND *)malloc(sizeof(ND));
-    if (!temp)
+    Node *new_node = (Node *)malloc(sizeof(Node));
+    if (!new_node)
     {
         printf("Memory allocation failed\n");
-        return;
+        return NULL;
     }
-    temp->info = item;
-    temp->next = *ptr;
-    *ptr = temp;
+    new_node->roll = roll;
+    strcpy(new_node->name, name);
+    new_node->next = NULL;
+    return new_node;
 }
 
-void insert_end(ND **ptr, RD item)
+// Insert at the beginning
+void insert_begin(Node **head, int roll, char *name)
 {
-    printf("\n");
-    ND *temp = (ND *)malloc(sizeof(ND));
-    if (!temp)
+    Node *new_node = create_node(roll, name);
+    if (!new_node)
+        return;
+    new_node->next = *head;
+    *head = new_node;
+}
+
+// Insert at the end
+void insert_end(Node **head, int roll, char *name)
+{
+    Node *new_node = create_node(roll, name);
+    if (!new_node)
+        return;
+
+    if (*head == NULL)
     {
-        printf("Memory allocation failed\n");
+        *head = new_node;
         return;
     }
-    temp->info = item;
-    temp->next = NULL;
-    if (*ptr == NULL)
-    {
-        *ptr = temp;
-        return;
-    }
-    ND *current = *ptr;
+
+    Node *current = *head;
     while (current->next != NULL)
     {
         current = current->next;
     }
-    current->next = temp;
+    current->next = new_node;
 }
 
-void insert_before(ND **ptr, int item)
+// Insert before a node
+void insert_before(Node **head, int target_roll, int roll, char *name)
 {
-    printf("\n");
-    ND *temp = (ND *)malloc(sizeof(ND));
-    if (!temp)
+    Node *new_node = create_node(roll, name);
+    if (!new_node)
+        return;
+
+    if (*head == NULL)
     {
-        printf("Memory allocation failed\n");
+        printf("List is empty, cannot insert before.\n");
+        free(new_node);
         return;
     }
-    printf("Enter the roll number: ");
-    scanf("%d", &temp->info.roll);
-    printf("Enter the name: ");
-    scanf("%s", temp->info.name);
 
-    ND *current = *ptr;
-    ND *prev = NULL;
-    while (current)
+    if ((*head)->roll == target_roll)
     {
-        if (current->info.roll == item)
-            break;
+        new_node->next = *head;
+        *head = new_node;
+        return;
+    }
+
+    Node *current = *head;
+    Node *prev = NULL;
+    while (current && current->roll != target_roll)
+    {
         prev = current;
         current = current->next;
     }
+
     if (!current)
     {
-        printf("Node not found\n");
-        free(temp);
+        printf("Target node with roll %d not found.\n", target_roll);
+        free(new_node);
         return;
     }
-    if (prev == NULL)
-    {
-        temp->next = *ptr;
-        *ptr = temp;
-    }
-    else
-    {
-        prev->next = temp;
-        temp->next = current;
-    }
+
+    prev->next = new_node;
+    new_node->next = current;
 }
 
-void insert_after(ND *ptr, int item)
+// Insert after a node
+void insert_after(Node *head, int target_roll, int roll, char *name)
 {
-    printf("\n");
-    ND *current = ptr;
-    while (current)
+    Node *current = head;
+    while (current && current->roll != target_roll)
     {
-        if (current->info.roll == item)
-            break;
         current = current->next;
     }
+
     if (!current)
     {
-        printf("Node not found\n");
+        printf("Target node with roll %d not found.\n", target_roll);
         return;
     }
-    ND *temp = (ND *)malloc(sizeof(ND));
-    if (!temp)
-    {
-        printf("Memory allocation failed\n");
+
+    Node *new_node = create_node(roll, name);
+    if (!new_node)
         return;
-    }
-    printf("Enter the roll number: ");
-    scanf("%d", &temp->info.roll);
-    printf("Enter the name: ");
-    scanf("%s", temp->info.name);
-    temp->next = current->next;
-    current->next = temp;
+
+    new_node->next = current->next;
+    current->next = new_node;
 }
 
-void delete_node(ND **ptr, int item)
+// Delete a node
+void delete_node(Node **head, int roll)
 {
-    printf("\n");
-    ND *current = *ptr;
-    ND *prev = NULL;
-    while (current)
+    Node *current = *head;
+    Node *prev = NULL;
+
+    while (current && current->roll != roll)
     {
-        if (current->info.roll == item)
-            break;
         prev = current;
         current = current->next;
     }
+
     if (!current)
     {
-        printf("Node not found\n");
+        printf("Node with roll number %d not found.\n", roll);
         return;
     }
-    printf("Roll number: %d\n", current->info.roll);
-    printf("Name: %s\n", current->info.name);
+
     if (prev == NULL)
     {
-        *ptr = current->next;
+        *head = current->next;
     }
     else
     {
         prev->next = current->next;
     }
     free(current);
+    printf("Node with roll number %d deleted.\n", roll);
 }
 
-int count_nodes(ND *ptr)
+// Count the number of nodes
+int count_nodes(Node *head)
 {
-    printf("\n");
     int count = 0;
-    while (ptr)
+    Node *current = head;
+    while (current)
     {
         count++;
-        ptr = ptr->next;
+        current = current->next;
     }
     return count;
 }
 
-ND *search_node(ND *ptr, int item)
+// Search for a node by roll number
+Node *search_node(Node *head, int roll)
 {
-    printf("\n");
-    while (ptr)
+    Node *current = head;
+    while (current)
     {
-        if (ptr->info.roll == item)
-            return ptr;
-        ptr = ptr->next;
+        if (current->roll == roll)
+        {
+            return current;
+        }
+        current = current->next;
     }
     return NULL;
 }
 
-void traverse(ND *ptr)
+// Display the list
+void traverse(Node *head)
 {
-    printf("\n");
-    if (!ptr)
+    if (!head)
     {
         printf("The list is empty.\n");
         return;
     }
 
-    printf("Linked list contents:\n");
-    printf("Roll number\tName\n");
-    while (ptr)
+    printf("Linked list contents:\nRoll number\tName\n");
+    Node *current = head;
+    while (current)
     {
-        
-        printf("%d\t\t%s\n", ptr->info.roll, ptr->info.name);
-        ptr = ptr->next;
+        printf("%d\t\t%s\n", current->roll, current->name);
+        current = current->next;
     }
 }
 
+// Main function
 int main()
 {
-    printf("\n");
-    ND *start = NULL;
-    RD rec;
-    int choice = 1, s;
+    Node *head = NULL;
+    int choice, roll, target_roll;
+    char name[100];
 
-    while (choice != 9)
+    do
     {
-        printf("\n1. Insert at the beginning\n");
+        printf("\nMenu:\n");
+        printf("1. Insert at the beginning\n");
         printf("2. Insert at the end\n");
         printf("3. Insert before a node\n");
         printf("4. Insert after a node\n");
@@ -223,59 +220,68 @@ int main()
         switch (choice)
         {
         case 1:
-            printf("\nEnter the roll number: ");
-            scanf("%d", &rec.roll);
-            printf("Enter the name: ");
-            scanf("%s", rec.name);
-            insert_begin(&start, rec);
+            printf("Enter roll number: ");
+            scanf("%d", &roll);
+            printf("Enter name: ");
+            scanf("%s", name);
+            insert_begin(&head, roll, name);
             break;
         case 2:
-            printf("\nEnter the roll number: ");
-            scanf("%d", &rec.roll);
-            printf("Enter the name: ");
-            scanf("%s", rec.name);
-            insert_end(&start, rec);
+            printf("Enter roll number: ");
+            scanf("%d", &roll);
+            printf("Enter name: ");
+            scanf("%s", name);
+            insert_end(&head, roll, name);
             break;
         case 3:
-            printf("\nEnter the roll number before which you want to insert: ");
-            scanf("%d", &s);
-            insert_before(&start, s);
+            printf("Enter the roll number before which to insert: ");
+            scanf("%d", &target_roll);
+            printf("Enter new roll number: ");
+            scanf("%d", &roll);
+            printf("Enter name: ");
+            scanf("%s", name);
+            insert_before(&head, target_roll, roll, name);
             break;
         case 4:
-            printf("\nEnter the roll number after which you want to insert: ");
-            scanf("%d", &s);
-            insert_after(start, s);
+            printf("Enter the roll number after which to insert: ");
+            scanf("%d", &target_roll);
+            printf("Enter new roll number: ");
+            scanf("%d", &roll);
+            printf("Enter name: ");
+            scanf("%s", name);
+            insert_after(head, target_roll, roll, name);
             break;
         case 5:
-            printf("\nEnter the roll number to delete: ");
-            scanf("%d", &s);
-            delete_node(&start, s);
+            printf("Enter roll number to delete: ");
+            scanf("%d", &roll);
+            delete_node(&head, roll);
             break;
         case 6:
-            printf("\nNumber of nodes: %d\n", count_nodes(start));
+            printf("Number of nodes: %d\n", count_nodes(head));
             break;
         case 7:
-            printf("\nEnter the roll number to search: ");
-            scanf("%d", &s);
-            ND *node = search_node(start, s);
-            if (node != NULL)
+            printf("Enter roll number to search: ");
+            scanf("%d", &roll);
+            Node *found = search_node(head, roll);
+            if (found)
             {
-                printf("Roll number: %d\n", node->info.roll);
-                printf("Name: %s\n", node->info.name);
+                printf("Node found: Roll number: %d, Name: %s\n", found->roll, found->name);
             }
             else
             {
-                printf("Node not found\n");
+                printf("Node with roll number %d not found.\n", roll);
             }
             break;
         case 8:
-            traverse(start);
+            traverse(head);
             break;
         case 9:
+            printf("Exiting...\n");
             break;
         default:
-            printf("\nInvalid choice\n");
+            printf("Invalid choice. Please try again.\n");
         }
-    }
+    } while (choice != 9);
+
     return 0;
 }
