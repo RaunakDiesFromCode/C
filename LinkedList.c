@@ -162,7 +162,7 @@ int count_nodes(Node *head)
     return count;
 }
 
-// Search for a node by roll number
+// Search for a node by roll number 
 Node *search_node(Node *head, int roll)
 {
     Node *current = head;
