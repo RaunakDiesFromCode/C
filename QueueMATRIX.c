@@ -54,6 +54,7 @@ void insert()
     queue_array[rear] = add_item;
   }
 }
+
 void delete()
 {
   if (front == -1 || front > rear)

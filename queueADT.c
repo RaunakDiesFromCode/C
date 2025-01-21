@@ -3,19 +3,19 @@
 
 typedef struct queue {
     int items[MAX];
-    int front, back;
+    int front, rear;
 } que;
 
 void push(que* q, int item) {
-    if(q->back == MAX - 1) {
+    if(q->rear == MAX - 1) {
         printf("Queue Overflow\n");
         return;
     }
-    q->items[++q->back] = item;
+    q->items[++q->rear] = item;
 }
 
 int pop(que* q) {
-    if(q->front > q->back) {
+    if(q->front > q->rear) {
         printf("Queue Underflow\n");
         return -1;
     }
@@ -23,12 +23,12 @@ int pop(que* q) {
 }
 
 void display(que* q) {
-    if(q->front > q->back) {
+    if(q->front > q->rear) {
         printf("Queue is empty\n");
         return;
     }
     int i;
-    for(i = q->front; i <= q->back; i++)
+    for(i = q->front; i <= q->rear; i++)
         printf("%d ", q->items[i]);
     printf("\n");
 }
@@ -37,7 +37,7 @@ int main() {
     int ch = 0, n;
     que q;
     q.front = 0;
-    q.back = -1;
+    q.rear = -1;
 
     while(ch != 4) {
         printf("\n1. Push\n2. Pop\n3. Display\n4. Exit");

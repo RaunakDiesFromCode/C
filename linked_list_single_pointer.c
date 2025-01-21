@@ -1,28 +1,222 @@
 #include <stdio.h>
-void insert_beg(int);
-void insert_end(int);
-void insert_before(int);
-void insert_after(int);
-void del_beg();
-void del_end();
-void del_pos();
-void count();
-void display();
+#include <stdlib.h>
 
 typedef struct node
 {
-  int info;
+  int data;
   struct node *next;
 } ND;
+
 ND *start = NULL;
 
-void main()
+void insert_beg(int data)
+{
+  ND *temp = (ND *)malloc(sizeof(ND));
+  temp->data = data;
+  temp->next = start;
+  start = temp;
+}
+
+void insert_end(int data)
+{
+  ND *temp = (ND *)malloc(sizeof(ND));
+  temp->data = data;
+  temp->next = NULL;
+
+  if (start == NULL)
+  {
+    start = temp;
+    return;
+  }
+
+  ND *current = start;
+  while (current->next)
+  {
+    current = current->next;
+  }
+  current->next = temp;
+}
+
+void insert_before(int data)
+{
+  int bef;
+  printf("Enter node before which to be inserted:");
+  scanf("%d", &bef);
+  ND *temp = (ND *)malloc(sizeof(ND));
+  temp->data = data;
+  temp->next = NULL;
+
+  if (start == NULL)
+  {
+    printf("List is empty.\n");
+    free(temp);
+    return;
+  }
+
+  if (start->data == bef)
+  {
+    temp->next = start;
+    start = temp;
+    return;
+  }
+
+  ND *current = start; // the node jetar agey dhokabo
+  ND *before = NULL;
+
+  while (current->data != bef && current)
+  {
+    before = current;
+    current = current->next;
+  }
+
+  if (current == NULL)
+  {
+    printf("Node not found.\n");
+    free(temp);
+    return;
+  }
+
+  before->next = temp;
+  temp->next = current;
+}
+
+void insert_after(int data)
+{
+  if (start == NULL)
+  {
+    printf("List is empty.\n");
+    return;
+  }
+
+  int aft;
+  printf("Enter node after which to be inserted:");
+  scanf("%d", &aft);
+
+  ND *temp = (ND *)malloc(sizeof(ND));
+  temp->data = data;
+
+  ND *current = start;
+  while (current && current->data != aft)
+  {
+    current = current->next;
+  }
+
+  if (current == NULL)
+  {
+    printf("Node not found.\n");
+    free(temp);
+    return;
+  }
+
+  temp->next = current->next;
+  current->next = temp;
+}
+
+void del_beg()
+{
+  if (start == NULL)
+  {
+    printf("List is empty.\n");
+    return;
+  }
+
+  ND *temp = start;
+  start = start->next;
+  free(temp);
+}
+
+void del_end()
+{
+  if (start == NULL)
+  {
+    printf("List is empty.\n");
+    return;
+  }
+
+  ND *current = start, *before = NULL;
+
+  if (current->next == NULL)
+  {
+    free(current);
+    start = NULL;
+    return;
+  }
+
+  while (current->next)
+  {
+    before = current;
+    current = current->next;
+  }
+  before->next = NULL;
+  free(current);
+}
+
+void del_pos()
+{
+  if (start == NULL)
+  {
+    printf("List is empty.\n");
+    return;
+  }
+  int pos, i = 1;
+  printf("Enter position to delete: ");
+  scanf("%d", &pos);
+  ND *current = start;
+  ND *before = NULL;
+
+  if (pos == 1)
+  {
+    start = start->next;
+    free(current);
+    return;
+  }
+
+  while (current != NULL && i < pos)
+  {
+    before = current;
+    current = current->next;
+    i++;
+  }
+
+  if (current == NULL)
+  {
+    printf("Position not found.\n");
+    return;
+  }
+
+  before->next = current->next;
+  free(current);
+}
+
+void display()
+{
+  ND *current = start;
+  while (current)
+  {
+    printf("%d -> ", current->data);
+    current = current->next;
+  }
+  printf("NULL");
+}
+
+void count()
+{
+  ND *current = start;
+  int count = 0;
+  while (current)
+  {
+    count++;
+    current = current->next;
+  }
+  printf("Count = %d", count);
+}
+
+int main()
 {
   int opt, val;
-  clrscr();
   while (1)
   {
-    printf("\n1:insert at beginning\n2:insert at end\n3:insert before a node\n4:insrt after a node\n5:delete at beginning\n6:delete at end\n7:delete at any position\n8:display\n9:count\n10:reverse\n11:reverse display\n12:exit\nenter your option: ");
+    printf("\n1:insert at beginning\n2:insert at end\n3:insert before a node\n4:insrt after a node\n5:delete at beginning\n6:delete at end\n7:delete at any position\n8:display\n9:count\n10:exit\nenter your option: ");
     scanf("%d", &opt);
     switch (opt)
     {
@@ -62,205 +256,11 @@ void main()
       count();
       break;
     case 10:
-      reverse();
-      break;
-    case 11:
-      rev_display(start);
-      break;
-    case 12:
-      exit(1);
+      exit(0);
       break;
     default:
       printf("wrong input\n");
     }
   }
-}
-
-void insert_beg(int data)
-{
-  ND *newnode;
-  newnode = (ND *)malloc(sizeof(ND));
-  newnode->info = data;
-  if (start == NULL)
-  {
-    newnode->next = NULL;
-    start = newnode;
-  }
-  else
-  {
-    newnode->next = start;
-    start = newnode;
-  }
-}
-
-void insert_end(int data)
-{
-  ND *newnode, *temp = start;
-  newnode = (ND *)malloc(sizeof(ND));
-  newnode->info = data;
-  newnode->next = NULL;
-  if (start == NULL)
-  {
-    start = newnode;
-  }
-  else
-  {
-    while (temp->next != NULL)
-    {
-      temp = temp->next;
-    }
-    temp->next = newnode;
-  }
-}
-
-void insert_before(int data)
-{
-  int x;
-  ND *newnode;
-  ND *temp = start, *temp1 = start;
-  newnode = (ND *)malloc(sizeof(ND));
-  newnode->info = data;
-  printf("enter the node before the newnode is inserted:");
-  scanf("%d", &x);
-  while (temp != NULL)
-  {
-    if (temp->info == x)
-    {
-      if (temp == temp1)
-      {
-        newnode->next = temp;
-        start = newnode;
-        return;
-      }
-      temp1->next = newnode;
-      newnode->next = temp;
-      return;
-    }
-    temp1 = temp;
-    temp = temp->next;
-  }
-  printf("\nnode not found\n");
-}
-
-void insert_after(int data)
-{
-  int x;
-  ND *newnode;
-  ND *temp = start, *temp1 = start;
-  newnode = (ND *)malloc(sizeof(ND));
-  newnode->info = data;
-  printf("enter the node after the newnode is inserted:");
-  scanf("%d", &x);
-  while (temp != NULL)
-  {
-    temp1 = temp->next;
-    if (temp->info == x)
-    {
-      temp->next = newnode;
-      newnode->next = temp1;
-      return;
-    }
-    temp = temp->next;
-  }
-  printf("\nno node found\n");
-}
-
-void del_beg()
-{
-  ND *temp = start;
-  if (start == NULL)
-    printf("\nlist is already  empty\n");
-  else
-  {
-    start = start->next;
-    free(temp);
-  }
-  printf("\n no node found!\n");
-}
-
-void del_end()
-{
-  ND *temp = start, *temp1;
-  if (start == NULL)
-    printf("list is already empty\n");
-  else
-  {
-    while (temp->next != NULL)
-    {
-      temp1 = temp;
-      temp = temp->next;
-    }
-    temp1->next = NULL;
-    free(temp);
-  }
-}
-
-void del_pos()
-{
-  int x;
-  ND *temp = start;
-  ND *prev = NULL;
-  ND *temp1;
-  printf("enter node which will be deleted:");
-  scanf("%d", &x);
-  if (start == NULL)
-  {
-    printf("list is already emty\n");
-    return;
-  }
-  while (temp != NULL)
-  {
-    if (temp->info == x)
-    {
-      if (temp == start)
-      {
-        start = start->next;
-        free(temp);
-        return;
-      }
-      prev = temp;
-      temp = temp->next;
-      temp1->next = prev->next;
-      free(prev);
-      return;
-    }
-    temp1 = temp;
-    temp = temp->next;
-  }
-  printf("\nnode not found\n");
-}
-
-void display()
-{
-  ND *temp = start;
-  if (start == NULL)
-    printf("list is empty\n");
-  else
-  {
-    while (temp->next != NULL)
-    {
-      printf("%d->", temp->info);
-      temp = temp->next;
-    }
-    printf("%d->null\n", temp->info);
-  }
-  getch();
-}
-
-void count()
-{
-  ND *temp = start;
-  int count = 0;
-  if (start == NULL)
-    printf("list is empty\n");
-  else
-  {
-    while (temp != NULL)
-    {
-      count++;
-      temp = temp->next;
-    }
-    printf("number of elements in the list is : %d\n", count);
-  }
-  getch();
+  return 1;
 }

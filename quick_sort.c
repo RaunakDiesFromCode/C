@@ -1,66 +1,82 @@
 #include <stdio.h>
 
-// Function to partition the array
-int partition(int arr[], int low, int high)
+// Function to swap two elements
+void swap(int A[], int i, int j)
 {
-  int pivot = arr[high]; // Pivot element
-  int i = (low - 1);     // Index of smaller element
+  int temp = A[i];
+  A[i] = A[j];
+  A[j] = temp;
+}
 
-  for (int j = low; j < high; j++)
+// Partition function
+int Partition(int A[], int low, int high)
+{
+  int left = low, right = high;
+  int pivot_item = A[low]; // Choosing the first element as the pivot
+
+  while (left < right)
   {
-    if (arr[j] < pivot)
-    {      // If the current element is smaller than the pivot
-      i++; // Increment the index of the smaller element
-      // Swap arr[i] and arr[j]
-      int temp = arr[i];
-      arr[i] = arr[j];
-      arr[j] = temp;
+    // Move left pointer while elements are less than or equal to the pivot
+    while (left <= right && A[left] <= pivot_item)
+      left++;
+
+    // Move right pointer while elements are greater than the pivot
+    while (A[right] > pivot_item)
+      right--;
+
+    // Swap elements if left is still less than right
+    if (left < right)
+    {
+      swap(A, left, right);
     }
   }
 
-  // Swap arr[i + 1] and arr[high] (or pivot)
-  int temp = arr[i + 1];
-  arr[i + 1] = arr[high];
-  arr[high] = temp;
+  // Place the pivot in its final position
+  A[low] = A[right];
+  A[right] = pivot_item;
 
-  return (i + 1);
+  return right; // Return the partition index
 }
 
-// Function to perform Quick Sort
-void quick_sort(int arr[], int low, int high)
+// QuickSort function
+void QuickSort(int A[], int low, int high)
 {
   if (low < high)
   {
-    int pi = partition(arr, low, high);
-
-    quick_sort(arr, low, pi - 1);  // Sort elements before partition
-    quick_sort(arr, pi + 1, high); // Sort elements after partition
+    int pivot = Partition(A, low, high); // Partition the array
+    QuickSort(A, low, pivot - 1);        // Sort the left subarray
+    QuickSort(A, pivot + 1, high);       // Sort the right subarray
   }
 }
 
+// Main function
 int main()
 {
-  int arr[] = {64, 34, 25, 12, 22, 11, 90};
-  int len = 7;
+  int n;
 
-  printf("Original array: \n");
-  for (int i = 0; i < len; i++)
+  // Input the size of the array
+  printf("Enter the number of elements in the array: ");
+  scanf("%d", &n);
+
+  int A[n];
+
+  // Input the array elements
+  printf("Enter the elements of the array:\n");
+  for (int i = 0; i < n; i++)
   {
-    printf("%d ", arr[i]);
+    scanf("%d", &A[i]);
   }
 
-  // Perform Quick Sort
-  quick_sort(arr, 0, len - 1);
+  // Call QuickSort
+  QuickSort(A, 0, n - 1);
 
-  printf("\nSorted array: \n");
-  for (int i = 0; i < len; i++)
+  // Print the sorted array
+  printf("Sorted array:\n");
+  for (int i = 0; i < n; i++)
   {
-    printf("%d ", arr[i]);
+    printf("%d ", A[i]);
   }
-
-  printf("\n__________________________\n");
-  printf("Time complexity: O(n log n)\n");
-  printf("Space complexity: O(log n)\n");
+  printf("\n");
 
   return 0;
 }

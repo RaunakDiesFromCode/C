@@ -2,7 +2,10 @@
   "files.associations": {
     "PAT1.C": "cpp",
     "SWAPNV.C": "cpp",
-    "ARMSTRON.C": "cpp"
+    "ARMSTRON.C": "cpp",
+    "unistd.h": "c",
+    "__verbose_abort": "cpp",
+    "cstdio": "cpp"
   },
   "cSpell.enableFiletypes": ["!c"]
 }
